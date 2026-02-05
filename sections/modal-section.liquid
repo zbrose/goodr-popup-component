@@ -4,8 +4,11 @@
 	>
     <div class="modal-content">
 
-			<button class="close-modal-btn">
-				{{ section.settings.close_button_text }}
+			<button class="close-modal-btn" aria-label="Close modal">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<line x1="18" y1="6" x2="6" y2="18"></line>
+					<line x1="6" y1="6" x2="18" y2="18"></line>
+				</svg>
 			</button>
 
       <div class="modal-hero">
@@ -17,16 +20,17 @@
 
       <p>{{ section.settings.modal_description }}</p>
 
-			<a href="{{ section.settings.confirm_button_link }}">
-				<button class="confirm-modal-btn">
-					{{ section.settings.confirm_button_text }}
+			<div class="modal-btn-group">
+
+				<a class="confirm-modal-btn" href="{{ section.settings.confirm_button_link }}">
+						{{ section.settings.confirm_button_text }}
+				</a>
+	
+				<button class="decline-modal-btn">
+					{{ section.settings.decline_button_text }}
 				</button>
-			</a>
 
-			<button class="decline-modal-btn">
-				{{ section.settings.decline_button_text }}
-			</button>
-
+			</div>
     </div>
   </div>
 </div>
@@ -63,13 +67,13 @@
       "type": "text",
       "id": "confirm_button_text",
       "label": "Confirm Button Text",
-      "default": "Shop All Styles"
+      "default": "SHOP ALL STYLES"
     },
     {
       "type": "text",
       "id": "decline_button_text",
       "label": "Confirm Button Text",
-      "default": "Nah, I Hate Deals"
+      "default": "NAH, I HATE DEALS"
     },
     {
       "type": "url",
@@ -102,8 +106,8 @@
 
 <style>
 #Section-{{ section.id }} {
-
 	--modal-navy: #0C2340;
+	--goodr-shadow: -4px 4px var(--modal-navy)
 }
 
 #Section-{{ section.id }} .modal-overlay {
@@ -119,6 +123,7 @@
 }
 
 #Section-{{ section.id }} .modal-content {
+  position: relative;
   background: #FFFFFF;
 	border: 3px solid var(--modal-navy);
   padding: 30px;
@@ -126,7 +131,7 @@
   text-align: center;
 	width: 484px;
 	height: 654px;
-  box-shadow: -4px 4px var(--modal-navy);
+  box-shadow: var(--goodr-shadow);
 	padding: 52px 55px;
 }
 
@@ -135,29 +140,69 @@
 	height: 360px;
 }
 
+#Section-{{ section.id }} .modal-btn-group {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
 #Section-{{ section.id }} .close-modal-btn {
-  margin-top: 20px;
-  padding: 8px 16px;
-  color: white;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  color: var(--modal-navy);
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+#Section-{{ section.id }} .close-modal-btn:hover {
+  opacity: 0.7;
 }
 #Section-{{ section.id }} .confirm-modal-btn {
-  margin-top: 20px;
-  padding: 8px 16px;
-  color: white;
-  border: none;
+  padding: 9px 0px;
+	width: 100%;
+	background-color:#EDE939;
   cursor: pointer;
   border-radius: 5px;
+	box-shadow: var(--goodr-shadow);
+	transition: box-shadow 0.3s ease, transform 0.3s ease;
+	border-radius: 25px;
+	border: 2px solid var(--modal-navy);
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 18px;
+	color: white;
+	text-shadow: -2.75px 2.75px var(--modal-navy);
+  -webkit-text-stroke: 1px var(--modal-navy); /* For Webkit browsers (Chrome, Safari, etc.) */
 }
+
+#Section-{{ section.id }} .confirm-modal-btn:hover {
+	box-shadow: 0px 0px 0px var(--modal-navy); 
+}
+#Section-{{ section.id }} .confirm-modal-btn:active {
+	box-shadow: 0px 0px 0px var(--modal-navy); 
+	transform: translate(4px, 4px); 
+  
+  /* Optional: Change background color on hover */
+  background-color: #f7f363; 
+}
+
 #Section-{{ section.id }} .decline-modal-btn {
-  margin-top: 20px;
-  padding: 8px 16px;
   color: var(--modal-navy);
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+	background-color: transparent;
+	text-decoration: underline;
+	font-size: 18px;
+	font-weight: 700;
 }
 </style>
 
