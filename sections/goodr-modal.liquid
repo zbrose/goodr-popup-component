@@ -1,0 +1,156 @@
+{{ 'goodr-modal.css' | asset_url | stylesheet_tag }}
+
+<div class="gdr-modal {% if section.settings.test_mode %}gdr-modal--test-mode{% endif %}" 
+   data-section-id="{{ section.id }}" 
+   data-delay="{{ section.settings.delay_time }}">
+  <div class="gdr-modal__overlay" aria-hidden="true">
+    <div class="gdr-modal__content" role="dialog" aria-modal="true">
+
+      {%- comment -%} Close Button {%- endcomment -%}
+      <button class="gdr-modal__close-btn" aria-label="Close modal">
+        <img src="{{ 'x.svg' | asset_url }}" class="gdr-modal__close-icon" alt="" loading="eager" width="20" height="20">
+      </button>
+
+      {%- comment -%} Render Dynamic Blocks {%- endcomment -%}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'hero' %}
+            {%- render 'goodr-modal-block-hero', block: block -%}
+
+          {% when 'description' %}
+            {%- render 'goodr-modal-block-description', block: block -%}
+
+          {% when 'buttons' %}
+            {%- render 'goodr-modal-block-buttons', block: block -%}
+        {% endcase %}
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'goodr-modal.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "goodr Modal",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Advanced Settings"
+    },
+    {
+      "type": "range",
+      "id": "delay_time",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "sec",
+      "label": "Delay Before Showing",
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "test_mode",
+      "label": "Force Open (Test Mode)",
+      "default": false,
+      "info": "Check this to keep the modal open while you style it in the editor"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero Section",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "modal_logo",
+          "label": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "modal_logo_alt",
+          "label": "Logo Alt Text",
+          "default": "Modal Logo"
+        },
+        {
+          "type": "image_picker",
+          "id": "modal_image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "modal_image_mobile",
+          "label": "Mobile Image (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "modal_image_alt",
+          "label": "Image Alt Text",
+          "default": "Modal Image"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "modal_description",
+          "label": "Description",
+          "default": "USE CODE [code] FOR $5 OFF YOUR FIRST ORDER",
+          "info": "Use [code] as a placeholder for the discount code"
+        },
+        {
+          "type": "text",
+          "id": "discount_code",
+          "label": "Discount Code",
+          "default": "GOODR5"
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Button Group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "confirm_button_text",
+          "label": "Confirm Button Text",
+          "default": "SHOP ALL STYLES"
+        },
+        {
+          "type": "url",
+          "id": "confirm_button_link",
+          "label": "Confirm Button Link",
+          "default": "/collections/all"
+        },
+        {
+          "type": "text",
+          "id": "decline_button_text",
+          "label": "Decline Button Text",
+          "default": "NAH, I HATE DEALS"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "goodr Modal",
+      "category": "Popup",
+      "blocks": [
+        {
+          "type": "hero"
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

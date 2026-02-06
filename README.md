@@ -26,7 +26,7 @@ Welcome to the goodr modal (official)! This is a reuseable modal component devel
 2. **Add the modal section to your theme** by including it in your Liquid template:
 
    ```liquid
-   {% section 'modal-section' %}
+   {% section 'goodr-modal' %}
    ```
 
 3. **Configure the modal** using Shopify Theme Editor or by editing the section's schema settings
@@ -40,12 +40,12 @@ Welcome to the goodr modal (official)! This is a reuseable modal component devel
 
 ```
 .
-├── README.md                  # This file
+├── README.md                # This file
 ├── sections/
-│   └── modal-section.liquid  # Main Liquid component
+│   └── goodr-modal.liquid  # Main Liquid component
 └── assets/
-    ├── modal-section.css     # Styling
-    └── modal-section.js      # Interactivity
+    ├── goodr-modal.css      # Styling
+    └── goodr-modal.js       # Interactivity
 ```
 
 ## Usage
@@ -55,12 +55,12 @@ Welcome to the goodr modal (official)! This is a reuseable modal component devel
 Add the section to your theme and configure via the Shopify Theme Editor or directly in your template:
 
 ```liquid
-{% section 'modal-section' %}
+{% section 'goodr-modal' %}
 ```
 
 ### Customization
 
-Refer to the schema settings in [sections/modal-section.liquid](sections/modal-section.liquid) to customize:
+Refer to the schema settings in [sections/goodr-modal.liquid](sections/goodr-modal.liquid) to customize:
 
 - Modal title and content
 - Trigger button text
