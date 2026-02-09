@@ -1,0 +1,324 @@
+{{ 'goodr-popup.css' | asset_url | stylesheet_tag }}
+
+<div
+  class='gdr-popup {% if section.settings.test_mode %}gdr-popup--test-mode{% endif %}'
+  data-section-id='{{ section.id }}'
+  data-delay='{{ section.settings.delay_time }}'
+  data-enabled='{{ section.settings.popup_enabled }}'
+  role='region'
+>
+  <div class='gdr-popup__overlay' data-popup-overlay>
+    <div
+      class='gdr-popup__content'
+      role='dialog'
+      aria-popup='true'
+      aria-labelledby='popup-title'
+      aria-describedby='popup-description'
+      style='--popup-background: {{ section.settings.popup_background_color }};'
+    >
+      <button class='gdr-popup__close-btn' aria-label='Close popup' data-popup-close>
+        <img
+          src='{{ 'x.svg' | asset_url }}'
+          class='gdr-popup__close-icon'
+          alt=''
+          loading='eager'
+          width='20'
+          height='20'
+        >
+      </button>
+
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'hero' %}
+            {%- render 'goodr-popup-block-hero', block: block -%}
+
+          {% when 'description' %}
+            {%- render 'goodr-popup-block-description', block: block -%}
+
+          {% when 'button' %}
+            {% if block.settings.button_type == 'secondary' %}
+              {%- render 'goodr-popup-secondary-button', block: block -%}
+            {% elsif block.settings.button_type == 'link' %}
+              {%- render 'goodr-popup-link-button', block: block -%}
+            {% else %}
+              {%- render 'goodr-popup-primary-button', block: block -%}
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script src='{{ 'goodr-popup.js' | asset_url }}' defer></script>
+
+{% schema %}
+{
+  "name": "Goodr Popup",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "popup_enabled",
+      "label": "Enable popup",
+      "default": true,
+      "info": "Toggle this to show or hide the popup sitewide"
+    },
+    {
+      "type": "select",
+      "id": "popup_background_color",
+      "label": "popup Background Color",
+      "options": [
+        { "value": "#0c2340", "label": "goodr Navy" },
+        { "value": "#EDE939", "label": "goodr Yellow" },
+        { "value": "#e06287", "label": "goodr Pink" },
+        { "value": "#69C0B1", "label": "goodr Teal" },
+        { "value": "#FFFFFF", "label": "White" },
+        { "value": "#000000", "label": "Black" }
+      ],
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Advanced Settings"
+    },
+    {
+      "type": "range",
+      "id": "delay_time",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "unit": "sec",
+      "label": "Delay Before Showing",
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "test_mode",
+      "label": "Force Open (Test Mode)",
+      "default": false,
+      "info": "Check this to keep the popup open while you style it in the editor"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero Section",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "popup_logo",
+          "label": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "popup_logo_alt",
+          "label": "Logo Alt Text",
+          "default": "popup Logo"
+        },
+        {
+          "type": "image_picker",
+          "id": "popup_image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "popup_image_mobile",
+          "label": "Mobile Image (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "popup_image_alt",
+          "label": "Image Alt Text",
+          "default": "popup Image"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Description Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "popup_description",
+          "label": "Description",
+          "default": "USE CODE [code] FOR $5 OFF YOUR FIRST ORDER"
+        },
+        {
+          "type": "select",
+          "id": "description_text_color",
+          "label": "Description Text Color",
+          "options": [
+            { "value": "#0c2340", "label": "goodr Navy" },
+            { "value": "#EDE939", "label": "goodr Yellow" },
+            { "value": "#e06287", "label": "goodr Pink" },
+            { "value": "#69C0B1", "label": "goodr Teal" },
+            { "value": "#FFFFFF", "label": "White" },
+            { "value": "#000000", "label": "Black" }
+          ],
+          "default": "#0c2340"
+        },
+        {
+          "type": "text",
+          "id": "discount_code",
+          "label": "Discount Code",
+          "default": "GOODR5"
+        },
+        {
+          "type": "select",
+          "id": "code_text_color",
+          "label": "Code Text Color",
+          "options": [
+            { "value": "#0c2340", "label": "goodr Navy" },
+            { "value": "#EDE939", "label": "goodr Yellow" },
+            { "value": "#e06287", "label": "goodr Pink" },
+            { "value": "#69C0B1", "label": "goodr Teal" },
+            { "value": "#FFFFFF", "label": "White" },
+            { "value": "#000000", "label": "Black" }
+          ],
+          "default": "#0c2340"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "select",
+          "id": "button_type",
+          "label": "Button Type",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" },
+            { "value": "link", "label": "Link" }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Button"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL",
+          "visible_if": "{{ block.settings.button_type == 'link' }}"
+        },
+        {
+          "type": "select",
+          "id": "text_color",
+          "label": "Text Color",
+          "options": [
+            { "value": "#0c2340", "label": "goodr Navy" },
+            { "value": "#EDE939", "label": "goodr Yellow" },
+            { "value": "#e06287", "label": "goodr Pink" },
+            { "value": "#69C0B1", "label": "goodr Teal" },
+            { "value": "#FFFFFF", "label": "White" },
+            { "value": "#000000", "label": "Black" }
+          ],
+          "default": "#0c2340"
+        },
+        {
+          "type": "header",
+          "content": "Primary Style Settings",
+          "info": "These settings only apply to Primary buttons"
+        },
+        {
+          "type": "select",
+          "id": "primary_color",
+          "label": "Primary Color",
+          "options": [
+            { "value": "#0c2340", "label": "goodr Navy" },
+            { "value": "#EDE939", "label": "goodr Yellow" },
+            { "value": "#e06287", "label": "goodr Pink" },
+            { "value": "#69C0B1", "label": "goodr Teal" },
+            { "value": "#FFFFFF", "label": "White" },
+            { "value": "#000000", "label": "Black" }
+          ],
+          "default": "#000000",
+          "visible_if": "{{ block.settings.button_type == 'primary' or block.settings.button_type == 'link' }}"
+        },
+        {
+          "type": "select",
+          "id": "secondary_color",
+          "label": "Secondary Color",
+          "options": [
+            { "value": "#0c2340", "label": "goodr Navy" },
+            { "value": "#EDE939", "label": "goodr Yellow" },
+            { "value": "#e06287", "label": "goodr Pink" },
+            { "value": "#69C0B1", "label": "goodr Teal" },
+            { "value": "#FFFFFF", "label": "White" },
+            { "value": "#000000", "label": "Black" }
+          ],
+          "default": "#FFFFFF",
+          "visible_if": "{{ block.settings.button_type == 'primary' or block.settings.button_type == 'link' }}"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "label": "Border Radius",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 20,
+          "visible_if": "{{ block.settings.button_type == 'primary' or block.settings.button_type == 'link' }}"
+        },
+        {
+          "type": "select",
+          "id": "font_style",
+          "label": "Font Style",
+          "options": [
+            { "value": "gdr-popup__button--regular", "label": "Regular" },
+            { "value": "gdr-popup__button--uppercase", "label": "Uppercase" }
+          ],
+          "default": "gdr-popup__button--regular"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Goodr Popup",
+      "category": "Popup",
+      "blocks": [
+        {
+          "type": "hero"
+        },
+        {
+          "type": "description",
+          "name": "Description",
+          "settings": {
+            "popup_description": "USE CODE [code] FOR $5 OFF YOUR FIRST ORDER",
+            "discount_code": "GOODR5",
+            "code_text_color": "#e06287"
+          }
+        },
+        {
+          "type": "button",
+          "name": "Link Button",
+          "settings": {
+            "button_type": "link",
+            "button_text": "SHOP ALL STYLES",
+            "primary_color": "#EDE939",
+            "text_color": "#FFFFFF",
+            "secondary_color": "#0c2340",
+            "border_radius": 20
+          }
+        },
+        {
+          "type": "button",
+          "name": "Secondary Button",
+          "settings": {
+            "button_type": "secondary",
+            "button_text": "NAH, I HATE DEALS",
+            "text_color": "#0c2340"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

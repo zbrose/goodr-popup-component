@@ -1,0 +1,38 @@
+{%- liquid
+  assign button_text = block.settings.button_text | default: 'Button'
+  assign text_color = block.settings.text_color | default: '#FFFFFF'
+  assign primary_color = block.settings.primary_color | default: '#EDE939'
+  assign secondary_color = block.settings.secondary_color | default: '#0c2340'
+  assign border_radius = block.settings.border_radius | default: 4
+-%}
+
+<button
+  type='button'
+  class='gdr-popup__button gdr-popup__button--primary {{ block.settings.font_style }}'
+  data-popup-button='primary'
+  data-button-text='{{ button_text | escape }}'
+  style='
+    --primary-color: {{ primary_color }};
+    --secondary-color: {{ secondary_color }};
+    --text-color: {{ text_color }};
+    --border-radius: {{ border_radius }}px;
+  '
+  {{ block.shopify_attributes }}
+>
+  {{- button_text -}}
+</button>
+
+{% javascript %}
+  if (!window.gdrButtonListenersInitialized) {
+    document.addEventListener('click', function (event) {
+      const button = event.target.closest('[data-popup-button="primary"]');
+      if (!button) return;
+
+      const buttonText = button.getAttribute('data-button-text');
+      console.log('Analytics Event: popup_primary_button', {
+        button_text: buttonText,
+      });
+    });
+    window.gdrButtonListenersInitialized = true;
+  }
+{% endjavascript %}

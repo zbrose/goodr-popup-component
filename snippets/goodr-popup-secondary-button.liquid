@@ -1,0 +1,31 @@
+{%- liquid
+  assign button_text = block.settings.button_text | default: 'No Thanks'
+  assign text_color = block.settings.text_color | default: '#0c2340'
+-%}
+
+<button
+  class='gdr-popup__button gdr-popup__button--secondary {{ block.settings.font_style }}'
+  type='button'
+  data-popup-close
+  data-popup-button='secondary'
+  data-button-text='{{ button_text | escape }}'
+  style='--text-color: {{ text_color }};'
+  {{ block.shopify_attributes }}
+>
+  {{- button_text -}}
+</button>
+
+{% javascript %}
+  if (!window.gdrSecondaryListenersInitialized) {
+    document.addEventListener('click', function (event) {
+      const button = event.target.closest('[data-popup-button="secondary"]');
+      if (!button) return;
+
+      const buttonText = button.getAttribute('data-button-text');
+      console.log('Analytics Event: popup_secondary_button', {
+        button_text: buttonText,
+      });
+    });
+    window.gdrSecondaryListenersInitialized = true;
+  }
+{% endjavascript %}

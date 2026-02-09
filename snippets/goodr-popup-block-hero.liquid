@@ -1,0 +1,72 @@
+{%- liquid
+  assign logo_alt = block.settings.popup_logo.alt | default: block.settings.popup_logo_alt | default: 'Logo'
+  assign desktop_alt = block.settings.popup_image.alt | default: block.settings.popup_image_alt | default: 'Hero Image'
+  assign mobile_alt = block.settings.popup_image_mobile.alt | default: desktop_alt
+-%}
+
+<div class='gdr-popup__hero' {{ block.shopify_attributes }}>
+  {%- if block.settings.popup_logo -%}
+    {{
+      block.settings.popup_logo
+      | image_url: width: 500
+      | image_tag: class: 'gdr-popup__logo', alt: logo_alt, loading: 'eager'
+    }}
+  {%- else -%}
+    <img
+      src='{{ 'goodr_logo_white.svg' | asset_url }}'
+      class='gdr-popup__logo'
+      alt='{{ logo_alt }}'
+      loading='eager'
+      width='200'
+      height='50'
+    >
+  {%- endif -%}
+
+  {%- if block.settings.popup_image -%}
+    {{
+      block.settings.popup_image
+      | image_url: width: 1000
+      | image_tag:
+        class: 'gdr-popup__image gdr-popup__image--desktop',
+        alt: desktop_alt,
+        loading: 'eager',
+        widths: '484, 748, 1000'
+    }}
+  {%- else -%}
+    <img
+      src='{{ 'desktop_popup_img.png' | asset_url }}'
+      class='gdr-popup__image gdr-popup__image--desktop'
+      alt='Desktop Background'
+      loading='eager'
+      width='484'
+      height='484'
+    >
+  {%- endif -%}
+
+  {%- if block.settings.popup_image_mobile -%}
+    {{
+      block.settings.popup_image_mobile
+      | image_url: width: 600
+      | image_tag:
+        class: 'gdr-popup__image gdr-popup__image--mobile',
+        alt: mobile_alt,
+        loading: 'eager',
+        widths: '326, 600'
+    }}
+  {%- elsif block.settings.popup_image -%}
+    {{
+      block.settings.popup_image
+      | image_url: width: 600
+      | image_tag: class: 'gdr-popup__image gdr-popup__image--mobile', alt: mobile_alt, loading: 'eager'
+    }}
+  {%- else -%}
+    <img
+      src='{{ 'mobile_popup_img.png' | asset_url }}'
+      class='gdr-popup__image gdr-popup__image--mobile'
+      alt='{{ mobile_alt }}'
+      loading='eager'
+      width='326'
+      height='400'
+    >
+  {%- endif -%}
+</div>

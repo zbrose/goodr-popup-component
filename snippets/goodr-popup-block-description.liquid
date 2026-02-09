@@ -1,0 +1,20 @@
+{%- liquid
+  assign raw_code = block.settings.discount_code | slice: 0, 15
+  assign raw_desc = block.settings.popup_description | default: 'USE CODE [code] FOR $5 OFF YOUR FIRST ORDER'
+
+  capture discount_span
+    echo '<span class="gdr-popup__discount-code" style="--code-color: ' | append: block.settings.code_text_color | append: '; --code-bg: ' | append: block.settings.code_bg_color | append: ';">' | append: raw_code | append: '</span>'
+  endcapture
+
+  assign formatted_description = raw_desc | replace: '[code]', discount_span
+-%}
+
+{%- if raw_desc != blank -%}
+  <p
+    class='gdr-popup__description'
+    {{ block.shopify_attributes }}
+    style='--description-color: {{ block.settings.description_text_color }};'
+  >
+    {{ formatted_description }}
+  </p>
+{%- endif -%}

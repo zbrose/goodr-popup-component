@@ -1,0 +1,36 @@
+{%- liquid
+  assign button_text = block.settings.button_text | default: 'Button'
+  assign link_url = block.settings.link_url | default: '/collections/all'
+-%}
+
+<a
+  class='gdr-popup__button gdr-popup__button--primary {{ block.settings.font_style }}'
+  data-popup-button='primary'
+  data-button-text='{{ button_text | escape }}'
+  href='{{ link_url }}'
+  style='
+    --primary-color: {{ block.settings.primary_color | default: "#EDE939" }};
+    --secondary-color: {{ block.settings.secondary_color | default: "#0c2340" }};
+    --text-color: {{ block.settings.text_color | default: "#FFFFFF" }};
+    --border-radius: {{ block.settings.border_radius | default: 4 }}px;
+  '
+  {{ block.shopify_attributes }}
+>
+  {{- button_text -}}
+</a>
+
+{% javascript %}
+  if (!window.gdrPopupButtonsInitialized) {
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-popup-button="primary"]');
+      if (!btn) return;
+
+      const buttonText = btn.getAttribute('data-button-text');
+      console.log('Analytics Event: popup_primary_button', {
+        button_text: buttonText,
+        url: btn.href,
+      });
+    });
+    window.gdrPopupButtonsInitialized = true;
+  }
+{% endjavascript %}
